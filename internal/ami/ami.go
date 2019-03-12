@@ -3,66 +3,13 @@ package main
 import (
 	"os"
 
+	"github.com/navinds25/aws-mission-ctrl/pkg/mcec2"
 	log "github.com/sirupsen/logrus"
 
 	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/ec2"
 	"github.com/aws/aws-sdk-go/service/s3"
 )
-
-func awsSession() (*session.Session, *aws.Config, error) {
-	region := "ap-south-1"
-	c := &aws.Config{
-		Region: aws.String(region),
-	}
-	sess, err := session.NewSession(c)
-	if err != nil {
-		return nil, nil, err
-	}
-	return sess, c, err
-}
-
-// S3Session returns an s3 session
-func S3Session() (*s3.S3, error) {
-	sess, c, err := awsSession()
-	if err != nil {
-		return nil, err
-	}
-	return s3.New(sess, c), nil
-}
-
-// EC2Session returns an ec2 session
-func EC2Session() (*ec2.EC2, error) {
-	sess, c, err := awsSession()
-	if err != nil {
-		return nil, err
-	}
-	return ec2.New(sess, c), nil
-}
-
-// ListBuckets returns all the buckets in aws S3
-func ListBuckets(sess *s3.S3) (*s3.ListBucketsOutput, error) {
-	input := s3.ListBucketsInput{}
-	resp, err := sess.ListBuckets(&input)
-	if err != nil {
-		return nil, err
-	}
-	return resp, nil
-}
-
-// CreateBucket creates an S3 bucket
-func CreateBucket(sess *s3.S3, bucketname, acl string) (*s3.CreateBucketOutput, error) {
-	input := s3.CreateBucketInput{
-		Bucket: &bucketname,
-		ACL:    &acl,
-	}
-	output, err := sess.CreateBucket(&input)
-	if err != nil {
-		return nil, err
-	}
-	return output, nil
-}
 
 // UploadCentOSImage uploads the ova file to the S3 bucket
 func UploadCentOSImage(sess *s3.S3, filename, key string) (*s3.PutObjectOutput, error) {
@@ -83,7 +30,7 @@ func UploadCentOSImage(sess *s3.S3, filename, key string) (*s3.PutObjectOutput, 
 }
 
 func RegisterAMI() {
-	ec2sess, err := EC2Session()
+	ec2sess, err := mcec2.EC2Session()
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -124,12 +71,4 @@ DESCRIBEIMAGETASK:
 			goto DESCRIBEIMAGETASK
 		}
 	}
-}
-
-func main() {
-	// s3sess, err := S3Session()
-	// if err != nil {
-	//	 log.Fatal(err)
-	// }
-	RegisterAMI()
 }

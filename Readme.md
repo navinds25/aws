@@ -1,3 +1,14 @@
+AWS Mission Control:
+overall design:
+
+1. pkgs for individual AWS components.
+
+2. internal for cli commands for each component.
+
+3. configuration database for state.
+
+4. Build flags for adding just the code you need.
+
 IAM:
 Design:
 
