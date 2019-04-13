@@ -1,9 +1,9 @@
-package main
+package ami
 
 import (
 	"os"
 
-	"github.com/navinds25/aws-mission-ctrl/pkg/mcec2"
+	mcec2 "github.com/navinds25/aws-mission-ctrl/pkg/ec2"
 	log "github.com/sirupsen/logrus"
 
 	"github.com/aws/aws-sdk-go/aws"
@@ -29,8 +29,9 @@ func UploadCentOSImage(sess *s3.S3, filename, key string) (*s3.PutObjectOutput, 
 	return output, nil
 }
 
+// RegisterAMI creates an ami
 func RegisterAMI() {
-	ec2sess, err := mcec2.EC2Session()
+	ec2sess, err := mcec2.Session()
 	if err != nil {
 		log.Fatal(err)
 	}
