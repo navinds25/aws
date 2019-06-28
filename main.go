@@ -10,9 +10,7 @@ import (
 	"strings"
 
 	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/awserr"
 	"github.com/aws/aws-sdk-go/service/s3"
-	"github.com/aws/aws-sdk-go/service/s3/s3manager"
 	"github.com/navinds25/mission-ctrl/pkg/mcs3"
 	log "github.com/sirupsen/logrus"
 )
@@ -92,28 +90,14 @@ func createPassFile(s3sess *s3.S3) error {
 
 // InitPassFile initializes the PassFile
 func InitPassFile(s3sess *s3.S3) error {
-	_, err := s3sess.HeadObject(&s3.HeadObjectInput{
-		Bucket: aws.String(BucketName),
-		Key:    aws.String(PassFile),
-	})
+	exists, err := mcs3.KeyExists(s3sess, BucketName, PassFile)
 	if err != nil {
-		if awserr, ok := err.(awserr.Error); ok {
-			switch awserr.Code() {
-			case s3.ErrCodeNoSuchBucket:
-				log.Error("bucket does not exist")
-			case s3.ErrCodeNoSuchKey:
-				log.Error("No such key")
-			case "NotFound":
-				log.Error("NotFound")
-				if err := createPassFile(s3sess); err != nil {
-					return err
-				}
-			default:
-				log.Error("Dunno")
-			}
+		return err
+	}
+	if !exists {
+		if err := createPassFile(s3sess); err != nil {
+			return err
 		}
-	} else {
-		log.Info("PassFile exists: ", PassFile)
 	}
 	return nil
 }
@@ -134,7 +118,7 @@ func AddSecret(s3sess *s3.S3) error {
 	tempNewFileName := filepath.Join("/tmp", PassFile+"_new")
 
 	// Downloading file from S3
-	if err := DownloadFile(s3sess, BucketName, tempS3FileName); err != nil {
+	if err := mcs3.DownloadFile(s3sess, BucketName, PassFile, tempS3FileName); err != nil {
 		return err
 	}
 	log.Info("Downloaded file")
@@ -170,23 +154,6 @@ func AddSecret(s3sess *s3.S3) error {
 		return err
 	}
 	if err := os.Remove(tempS3FileName); err != nil {
-		return err
-	}
-	return nil
-}
-
-// DownloadFile downloads a file from S3
-func DownloadFile(s3sess *s3.S3, bucketName string, fileName string) error {
-	downloader := s3manager.NewDownloaderWithClient(s3sess)
-	tmpFile, err := os.Create(fileName)
-	if err != nil {
-		return err
-	}
-	_, err = downloader.Download(tmpFile, &s3.GetObjectInput{
-		Bucket: aws.String(bucketName),
-		Key:    aws.String(PassFile),
-	})
-	if err != nil {
 		return err
 	}
 	return nil
