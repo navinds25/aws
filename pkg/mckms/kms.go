@@ -1,4 +1,4 @@
-package kms
+package mckms
 
 import (
 	"github.com/aws/aws-sdk-go/service/kms"

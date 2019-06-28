@@ -1,8 +1,8 @@
-package ec2
+package mcec2
 
 import (
 	"github.com/aws/aws-sdk-go/service/ec2"
-	"github.com/navinds25/aws-mission-ctrl/pkg/common"
+	"github.com/navinds25/mission-ctrl/pkg/common"
 )
 
 // Session returns an ec2 session

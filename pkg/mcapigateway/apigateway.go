@@ -1,4 +1,4 @@
-package apigateway
+package mcapigateway
 
 /*
 mcag = Mission Control Api Gateway.

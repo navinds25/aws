@@ -1,7 +1,7 @@
-package iam
+package mciam
 
 import (
-	"github.com/navinds25/aws-mission-ctrl/pkg/common"
+	"github.com/navinds25/mission-ctrl/pkg/common"
 
 	"github.com/aws/aws-sdk-go/service/iam"
 )

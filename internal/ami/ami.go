@@ -3,7 +3,7 @@ package ami
 import (
 	"os"
 
-	mcec2 "github.com/navinds25/aws-mission-ctrl/pkg/ec2"
+	mcec2 "github.com/navinds25/mission-ctrl/pkg/mcec2"
 	log "github.com/sirupsen/logrus"
 
 	"github.com/aws/aws-sdk-go/aws"

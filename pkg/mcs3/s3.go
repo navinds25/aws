@@ -1,9 +1,9 @@
-package s3
+package mcs3
 
 import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/s3"
-	"github.com/navinds25/aws-mission-ctrl/pkg/common"
+	"github.com/navinds25/mission-ctrl/pkg/common"
 )
 
 // Session returns an s3 session
