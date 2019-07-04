@@ -1,4 +1,4 @@
-package mclambda
+package serverless
 
 import (
 	"log"

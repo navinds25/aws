@@ -11,7 +11,8 @@ import (
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/s3"
-	"github.com/navinds25/mission-ctrl/pkg/mcs3"
+	"github.com/navinds25/mission-ctrl/pkg/queryengine"
+	"github.com/navinds25/mission-ctrl/pkg/storage"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -90,7 +91,7 @@ func createPassFile(s3sess *s3.S3) error {
 
 // InitPassFile initializes the PassFile
 func InitPassFile(s3sess *s3.S3) error {
-	exists, err := mcs3.KeyExists(s3sess, BucketName, PassFile)
+	exists, err := storage.KeyExists(s3sess, BucketName, PassFile)
 	if err != nil {
 		return err
 	}
@@ -118,7 +119,7 @@ func AddSecret(s3sess *s3.S3) error {
 	tempNewFileName := filepath.Join("/tmp", PassFile+"_new")
 
 	// Downloading file from S3
-	if err := mcs3.DownloadFile(s3sess, BucketName, PassFile, tempS3FileName); err != nil {
+	if err := storage.DownloadFile(s3sess, BucketName, PassFile, tempS3FileName); err != nil {
 		return err
 	}
 	log.Info("Downloaded file")
@@ -161,11 +162,12 @@ func AddSecret(s3sess *s3.S3) error {
 
 // ListSecrets lists the secrets
 func ListSecrets(s3sess *s3.S3) error {
+	queryengine.Session()
 	return nil
 }
 
-func main() {
-	s3sess, err := mcs3.Session()
+func main2() {
+	s3sess, err := storage.Session()
 	if err != nil {
 		log.Fatal(err)
 	}
