@@ -1,4 +1,4 @@
-AWS Mission Control:
+Mission Control:
 overall design:
 
 1. pkgs for individual AWS components.
@@ -23,4 +23,7 @@ ii. Update user:
 else:
 create user.
 
-2. 
+# Applications:
+## KMS-PASS:
+
+

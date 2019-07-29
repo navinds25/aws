@@ -29,7 +29,7 @@ func main() {
 	//}
 	//os.Exit(0)
 	bucketName := "mordor.amis"
-	filename := "epp4.4.0.6.ova"
+	filename := "epp4.4.0.6.raw"
 	// Takes filename, format
 	s3sess, err := storage.Session()
 	if err != nil {
@@ -52,7 +52,7 @@ func main() {
 	if err := servers.RegisterAMI(ec2sess, &servers.RegisterAMIOptions{
 		Architecture: "x86_64",
 		Description:  "EPP Server",
-		Format:       "ova",
+		Format:       "raw",
 		Bucket:       bucketName,
 		Key:          filename,
 	}); err != nil {

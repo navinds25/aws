@@ -137,7 +137,7 @@ func MultiPartUploadFile(bucket, filename string) (string, error) {
 	}
 	uploader := s3manager.NewUploader(awsSess, func(u *s3manager.Uploader) {
 		u.PartSize = 5 * 1024 * 1024
-		u.Concurrency = 4
+		u.Concurrency = 8
 	})
 	result, err := uploader.Upload(&s3manager.UploadInput{
 		Bucket: aws.String(bucket),

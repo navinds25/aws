@@ -13,8 +13,13 @@ func AWSSession() (*session.Session, *aws.Config, error) {
 	if Region == "" {
 		Region = "ap-south-1"
 	}
+	//creds := credentials.NewStaticCredentialsFromCreds(credentials.Value{
+	//	AccessKeyID:     "AKIAZNPESHRZA564GQ65",
+	//	SecretAccessKey: "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",
+	//})
 	c := &aws.Config{
 		Region: aws.String(Region),
+		//Credentials: creds,
 	}
 	sess, err := session.NewSession(c)
 	if err != nil {
